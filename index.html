@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white flex items-start justify-center py-12 px-4">
+
+    <div class="w-full max-w-2xl">
+        <header class="mb-6 text-center">
+            <h1 class="text-3xl font-semibold">Pomodoro Timer</h1>
+            <p class="text-sm text-gray-500 mt-1">Modern minimalist timer for deep focus</p>
+        </header>
+
+        <main class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="flex flex-col items-center gap-4">
+                <div class="relative w-48 h-48">
+                    <svg class="w-full h-full" viewBox="0 0 120 120">
+                        <defs>
+                            <linearGradient id="g" x1="0%" x2="100%">
+                                <stop offset="0%" stopColor="#111827" stopOpacity="0.9" />
+                                <stop offset="100%" stopColor="#111827" stopOpacity="0.6" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="60" cy="60" r="52" stroke="#e6e7e9" strokeWidth="8" fill="none" />
+                        <circle id="progress-ring" cx="60" cy="60" r="52" stroke="url(#g)" strokeWidth="8" strokeLinecap="round" fill="none"
+                                transform="rotate(-90 60 60)" />
+                        <text id="time-display" x="60" y="64" textAnchor="middle" fontSize="18" fontWeight="700">30:00</text>
+                    </svg>
+                </div>
+
+                <div id="duration-buttons" class="w-full flex flex-wrap gap-3 justify-center">
+                    </div>
+
+                <p id="duration-tooltip" class="text-center text-gray-500 text-sm mt-2"></p>
+
+                <div class="w-full mt-3">
+                    <div class="text-xs text-gray-600 mb-1">Recommended breaks</div>
+                    <div id="break-buttons" class="flex gap-2 flex-wrap">
+                        </div>
+                    <p class="text-xs text-gray-400 mt-2">Choose a break length — suggestions based on ultradian rhythm research.</p>
+                </div>
+
+                <div class="flex items-center gap-3 mt-4">
+                    <button id="start-stop-btn" class="px-5 py-2 rounded-full border border-black bg-black text-white font-medium shadow-sm">Start</button>
+                    <button id="reset-btn" class="px-4 py-2 rounded-full border border-gray-200 text-sm">Reset</button>
+                    <div class="ml-4 text-sm text-gray-600">Sessions: <span id="sessions-count" class="font-medium text-gray-900">0</span></div>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 gap-6">
+                <section class="bg-gray-50 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-lg font-medium">Tasks</h2>
+                        <div class="text-xs text-gray-400">Check when done</div>
+                    </div>
+                    <div id="task-list" class="space-y-2">
+                        </div>
+                    <div class="flex gap-2 mt-3">
+                        <input id="new-task-input" placeholder="Add task" class="flex-1 rounded-md border border-gray-200 px-3 py-2 text-sm" />
+                        <button id="add-task-btn" class="px-3 py-2 rounded-md bg-black text-white text-sm">Add</button>
+                    </div>
+                </section>
+
+                <section class="bg-white rounded-xl p-4 border border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-medium text-gray-800">Productivity curve</h3>
+                        <div class="text-xs text-gray-400">Grey = typical peaks • Black dot = your position</div>
+                    </div>
+                    <div class="w-full overflow-hidden rounded-md" style="background: #fbfbfb;">
+                        <svg id="graph-svg" viewBox="0 0 700 120" class="w-full h-28">
+                            <path id="graph-path-bg" fill="none" stroke="#e0e0e0" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                            <path id="graph-path-fg" fill="none" stroke="#f5f5f5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            <circle id="graph-dot" r="5" fill="#000" />
+                        </svg>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <div id="celebration-overlay" class="fixed inset-0 pointer-events-none flex items-start justify-center mt-24 z-50 hidden">
+            <div class="relative w-full max-w-2xl flex justify-center">
+                <div class="absolute left-0 right-0 text-center">
+                    <div class="text-4xl">🎉</div>
+                    <div class="mt-2 text-lg font-semibold">Great work — session complete!</div>
+                </div>
+                <div id="emoji-rain-container"></div>
+            </div>
+        </div>
+
+        <footer class="mt-6 text-center text-xs text-gray-400">Tip: try aligning 90–120 minute blocks with your peak focus for best results.</footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
