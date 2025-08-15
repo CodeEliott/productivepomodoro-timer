@@ -96,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // These functions update the UI based on the current state
     function render() {
         renderTimer();
+        renderSessionTitle();
         renderDurationButtons();
         renderBreakButtons();
         renderTasks();
@@ -173,7 +174,13 @@ document.addEventListener("DOMContentLoaded", () => {
             taskListContainer.appendChild(label);
         });
     }
-
+    function renderSessionTitle() {
+        if (state.mode === 'work') {
+            sessionTitle.textContent = "Work Session";
+        } else {
+            sessionTitle.textContent = "Break Time";
+        }
+    }
     function renderGraph() {
         const graphWidth = 700, graphHeight = 120;
 
@@ -224,6 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
             state.running = false;
             cancelAnimationFrame(rafRef);
         }
+        state.mode = 'work'; 
         state.secondsLeft = state.selectedMinutes * 60;
         state.elapsed = 0;
         state.breakMinutes = null;
@@ -253,14 +261,32 @@ document.addEventListener("DOMContentLoaded", () => {
         state.secondsLeft = left;
 
         if (elapsedSec >= totalSeconds) {
-            state.running = false;
-            state.elapsed = totalSeconds;
-            state.secondsLeft = 0;
-            state.sessionsCompleted++;
-            sessionsCount.textContent = state.sessionsCompleted;
-            startStopBtn.textContent = "Start";
-            triggerCelebration();
+            // --- SESSION END LOGIC ---
+            if (state.mode === 'work') {
+                // Work session has just ended
+                state.sessionsCompleted++;
+                triggerCelebration();
+
+                // Check if a break is selected and start it
+                if (state.breakMinutes > 0) {
+                    state.mode = 'break';
+                    state.elapsed = 0;
+                    state.secondsLeft = state.breakMinutes * 60;
+                    startTimestamp = performance.now(); // Reset start time for the break
+                } else {
+                    // No break selected, so just stop
+                    state.running = false;
+                    cancelAnimationFrame(rafRef);
+                }
+
+            } else {
+                // Break session has just ended, reset to a new work session
+                playVictorySound(); // Play a sound to signal the break is over
+                resetTimer();
+                return; // Stop the tick loop immediately
+            }
         }
+
         
         // Only update the fast-changing parts of the UI
         renderTimer();
