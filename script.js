@@ -20,14 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
         5: [1, 2]
     };
 
-    // --- STATE MANAGEMENT ---
-    // All state is stored in this object, similar to React's state
+// --- STATE MANAGEMENT ---
     let state = {
         selectedMinutes: 30,
         breakMinutes: null,
         running: false,
         secondsLeft: 30 * 60,
         elapsed: 0,
+        mode: 'work',
         tasks: [
             { id: 1, text: "Read article", done: false },
             { id: 2, text: "Write report", done: false }
@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Get references to all the HTML elements we need to interact with
     const timeDisplay = document.getElementById("time-display");
     const progressRing = document.getElementById("progress-ring");
+    const sessionTitle = document.getElementById("session-title"); 
     const durationButtonsContainer = document.getElementById("duration-buttons");
     const durationTooltip = document.getElementById("duration-tooltip");
     const breakButtonsContainer = document.getElementById("break-buttons");
